@@ -33,6 +33,6 @@ public:
 		
 
 	UFUNCTION(BlueprintCallable)
-		void CreateActor(TSubclassOf<AActor> ClassType);
+		void CreateActor(TSubclassOf<AActor> ClassType, FVector Location, FRotator Rotation);
 		
 };
