@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Bomb.generated.h"
 
-UCLASS()
+UCLASS(ClassGroup = (Custom))
 class BOMBERMAN_API ABomb : public AActor
 {
 	GENERATED_BODY()
