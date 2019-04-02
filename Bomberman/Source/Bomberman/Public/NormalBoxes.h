@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Bomb.generated.h"
+#include "NormalBoxes.generated.h"
 
-UCLASS(ClassGroup = (Custom))
-class BOMBERMAN_API ABomb : public AActor
+UCLASS()
+class BOMBERMAN_API ANormalBoxes : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABomb();
+	ANormalBoxes();
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,15 +25,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* SuperMesh;
-
-	UPROPERTY(EditAnywhere)
-		float TimeToExplode = 3.0f;
-
-	UFUNCTION()
-		void Explosion();
-
-private:
-
-	FTimerHandle TimerHandle;
 	
+
 };

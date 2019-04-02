@@ -3,6 +3,10 @@
 #include "Bomb.h"
 #include "ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
+#include "Public/TimerManager.h"
+#include "Engine/Engine.h"
+
+
 
 // Sets default values
 ABomb::ABomb()
@@ -13,6 +17,7 @@ ABomb::ABomb()
 	// Setting up default mesh 
 	SuperMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SuperMesh"));	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MyMesh(TEXT("/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere"));
+	if(MyMesh.Succeeded())
 	SuperMesh->SetStaticMesh(MyMesh.Object);
 
 	
@@ -23,6 +28,10 @@ void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Execute (Explosion) function after some Time (TimeToExplode) 
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABomb::Explosion, TimeToExplode, false);
+
+
 }
 
 // Called every frame
@@ -30,5 +39,12 @@ void ABomb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ABomb::Explosion()
+{
+	//TODO Create function MultiRayTracing and check for colisions
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "BOOOM");
+	
 }
 
