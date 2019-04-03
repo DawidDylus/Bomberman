@@ -31,9 +31,15 @@ public:
 
 	UFUNCTION()
 		void Explosion();
+	
+	// Eliminate magic number
+	UPROPERTY(EditAnywhere)
+		float Range = 250.0f;
+
 
 private:
 
 	FTimerHandle TimerHandle;
 	
+
 };

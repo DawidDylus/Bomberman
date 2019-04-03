@@ -9,3 +9,4 @@ Notes obout SpawnActorComponent:
 I created it specialy for creating Actors in world.I wanted this to be a component because it's reusable and I will need similar functionality with pickups.
 
 I am trying to put all my #include in .cpp files so it will not be loaded when I put reference to .h file
+
