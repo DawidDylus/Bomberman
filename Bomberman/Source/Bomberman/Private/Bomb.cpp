@@ -44,42 +44,118 @@ void ABomb::Tick(float DeltaTime)
 }
 
 void ABomb::Explosion()
-{
-	//TODO Create function MultiRayTracing and check for colisions
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, "BOOOM");
+{	
 	
-	TArray<FHitResult> OutHits;
+	// Checking for colisions by drawing LineTraces to 4 sides 
+	// TODO Refactor Function
+	TArray<FHitResult> OutHits1;
+	
 	FCollisionQueryParams CollisionParams;
-	FVector Start = GetActorLocation();	
+	CollisionParams.AddIgnoredActor(this->GetUniqueID());
+	CollisionParams.bIgnoreTouches = false;
 
-	// TODO Change function to draw only 2 lines
+	FVector Start = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f);	//adding hight to be near center of actor
+	FVector ExplosionDirectionRight = FVector(-1.0f, 0.0f, 0.0f);
+	FVector EndRight = Start + (ExplosionDirectionRight  * Range);
 
-	// Checking for colisions by drawing LineTraces to 4 sides
-	FVector ExplosionDirectionRight = FVector(-1.0f, 0.0f, 0.0f);	
-	FVector EndRight = Start + (ExplosionDirectionRight  * Range);		
-	DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, true, 30, 10, 5);
-	bool isHitRight = GetWorld()->LineTraceMultiByObjectType(OutHits, Start, EndRight, ECC_Visibility, CollisionParams);
+	
+
+
+	DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 30, 10, 5);
+
+	bool isHitRight = GetWorld()->LineTraceMultiByChannel(OutHits1, Start, EndRight, ECC_Visibility, CollisionParams);
+
+
+	// TODO function that handle interaction with characters and boxes
+	for(FHitResult Results : OutHits1)
+	{		
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Results.GetActor()->GetName());
+	}
 	
 	
+
+	/*
+	TArray<FHitResult> OutHits2;
+	TArray<FHitResult> OutHits3;
+	TArray<FHitResult> OutHits4;
+
+	CollisionParams.bIgnoreTouches = false;
+	// Ignoring thic so that it will not hit itself.
+	
+
 	FVector ExplosionDirectionLeft = FVector(1.0f, 0.0f, 0.0f);
 	FVector EndLeft = Start + (ExplosionDirectionLeft  * Range);
-	DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, true, 30, 10, 5);
-	bool isHitLeft = GetWorld()->LineTraceMultiByObjectType(OutHits, Start, EndLeft, ECC_Visibility, CollisionParams);
+	DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 30, 10, 5);
+	bool isHitLeft = GetWorld()->LineTraceMultiByChannel(OutHits2, Start, EndLeft, ECC_Visibility, CollisionParams);
 
 
 	FVector ExplosionDirectionUp = FVector(0.0f, 1.0f, 0.0f);
-	FVector EndUp = Start + (ExplosionDirectionUp  * Range); 
-	DrawDebugLine(GetWorld(), Start, EndUp, FColor::Green, true, 30, 10, 5);
-	bool isHitUp = GetWorld()->LineTraceMultiByObjectType(OutHits, Start, EndUp, ECC_Visibility, CollisionParams);
-		
-
-	FVector ExplosionDirectionDown = FVector(0.0f, -1.0f, 0.0f);
-	FVector EndDown = Start + (ExplosionDirectionDown  * Range);
-	DrawDebugLine(GetWorld(), Start, EndDown, FColor::Orange, true, 30, 10, 5);
-	bool isHitDown = GetWorld()->LineTraceMultiByObjectType(OutHits, Start, EndDown, ECC_Visibility, CollisionParams);
-
-
+	FVector EndUp = Start + (ExplosionDirectionUp  * Range);
+	DrawDebugLine(GetWorld(), Start, EndUp, FColor::Green, false, 30, 10, 5);
+	bool isHitUp = GetWorld()->LineTraceMultiByChannel(OutHits3, Start, EndUp, ECC_Visibility, CollisionParams);
 
 	
+
+	FVector ExplosionDirectionDown = FVector(0.0f, -1.0f, 0.0f);
+
+	FVector EndDown = Start + (ExplosionDirectionDown  * Range);
+	DrawDebugLine(GetWorld(), Start, EndDown, FColor::Orange, false, 30, 10, 5);
+	bool isHitDown = GetWorld()->LineTraceMultiByChannel(OutHits4, Start, EndDown, ECC_Visibility, CollisionParams);
+
+	//change to function
+	
+
+	if (isHitLeft)
+	{
+		FHitResult RR2;
+		FString RRRes2 = RR2.GetFirstBlockingHit(OutHits2)->GetActor()->GetName();
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Blue, RRRes2);
+	}
+
+	if (isHitUp)
+	{
+		FHitResult RR3;
+		FString RRRes3 = RR3.GetFirstBlockingHit(OutHits3)->GetActor()->GetName();
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Green, RRRes3);
+	}
+
+	if (isHitDown)
+	{ 
+		FHitResult RR4;
+		FString RRRes4 = RR4.GetFirstBlockingHit(OutHits4)->GetActor()->GetName();
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Orange, RRRes4);
+	}
+	
+	// TODO Print OuthHits on screan 
+	/*for (FHitResult Result : OutHits1)
+	{
+		
+		
+		
+		
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Purple, Res);
+	}
+	
+	
+
+	
+	for (FHitResult Result : OutHits2)
+	{
+		FString Res = Result.GetActor()->GetName();
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Res);
+	}
+	
+	for (FHitResult Result : OutHits3)
+	{
+		FString Res = Result.GetActor()->GetName();
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Res);
+	}
+	
+	for (FHitResult Result : OutHits4)
+	{
+		FString Res = Result.GetActor()->GetName();
+		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Res);
+	}
+	*/
 }
 

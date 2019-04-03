@@ -40,6 +40,6 @@ public:
 private:
 
 	FTimerHandle TimerHandle;
-	
+	  	
 
 };
