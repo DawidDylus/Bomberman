@@ -43,60 +43,115 @@ void ABomb::Tick(float DeltaTime)
 
 }
 
+//Create one TArray<FHitResult> From different LineTraceMultiByChannel
+//Quantity of linesTrace is specified by number of elements in ExplosionDirections array
+void ABomb::ExplosionHits(TArray<FHitResult>& OutHits)
+{
+	
+	for (FVector ExplosionDirection : ExplosionDirections)
+	{
+
+		TArray<FHitResult> OutHitsTemp;
+
+		FVector StartLocation = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f); //adding hight to be near center of actor
+
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.AddIgnoredActor(this->GetUniqueID());	// Ignore itself so that ABomb will not block LineTrace
+		CollisionParams.bIgnoreTouches = false;					// Dont ingore overlaping
+
+		FVector EndLocation = StartLocation + (ExplosionDirection * Range);
+
+		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 30, 10, 5);
+
+		GetWorld()->LineTraceMultiByChannel(OutHitsTemp, StartLocation, EndLocation, ECC_Visibility, CollisionParams);		
+
+		OutHits.Append(OutHitsTemp);
+
+	}	
+}
+
 void ABomb::Explosion()
 {	
-	
 	// Checking for colisions by drawing LineTraces to 4 sides 
-	// TODO Refactor Function
-	TArray<FHitResult> OutHits1;
-	
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(this->GetUniqueID());
-	CollisionParams.bIgnoreTouches = false;
 
-	FVector Start = GetActorLocation() + FVector(0.0f, 0.0f, 50.0f);	//adding hight to be near center of actor
-	FVector ExplosionDirectionRight = FVector(-1.0f, 0.0f, 0.0f);
-	FVector EndRight = Start + (ExplosionDirectionRight  * Range);
+	TArray<FHitResult> OutHits;
+
+	ExplosionHits(OutHits);
 
 	
-
-
-	DrawDebugLine(GetWorld(), Start, EndRight, FColor::Red, false, 30, 10, 5);
-
-	bool isHitRight = GetWorld()->LineTraceMultiByChannel(OutHits1, Start, EndRight, ECC_Visibility, CollisionParams);
-
-
 	// TODO function that handle interaction with characters and boxes
-	for(FHitResult Results : OutHits1)
-	{		
+	for (FHitResult Results : OutHits)
+	{
 		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Results.GetActor()->GetName());
 	}
+
+
+
+
+
+
+	// TODO Refactor Function	
+	/*
+	TArray<FHitResult> OutHitsRightRay;
+	TArray<FHitResult> OutHitsLeftRay;
+	TArray<FHitResult> OutHitsUpRay;
+	TArray<FHitResult> OutHitsDownRay;
+	*/
+	// create array of direction and then go throu it in funcions (difrent directions will have difrent outpust[htis] and then add all of those arrays into one and get it back)
+
+	/*FVector ExplosionDirectionRight = FVector(-1.0f, 0.0f, 0.0f);
+	FVector ExplosionDirectionLeft = FVector(1.0f, 0.0f, 0.0f);
+	FVector ExplosionDirectionUp = FVector(0.0f, 1.0f, 0.0f);
+	FVector ExplosionDirectionDown = FVector(0.0f, -1.0f, 0.0f);
+	*/
+	/*
+	TArray<FVector> ExplosionDirections;
+	Directions.Add(ExplosionDirectionRight);
+	Directions.Add(ExplosionDirectionLeft);
+	Directions.Add(ExplosionDirectionUp);
+	Directions.Add(ExplosionDirectionDown);
+	*/
+	
+	/*
+	ExplosionHits(OutHitsRightRay, ExplosionDirectionRight);
+	ExplosionHits(OutHitsLeftRay, ExplosionDirectionLeft);
+	ExplosionHits(OutHitsUpRay, ExplosionDirectionUp);
+	ExplosionHits(OutHitsDownRay, ExplosionDirectionDown);
+	*/
+
+		
+	
+	
+
+	
+
+
+	
+
+	
+
+	
+	
 	
 	
 
 	/*
-	TArray<FHitResult> OutHits2;
-	TArray<FHitResult> OutHits3;
-	TArray<FHitResult> OutHits4;
+	
 
 	CollisionParams.bIgnoreTouches = false;
 	// Ignoring thic so that it will not hit itself.
 	
-
-	FVector ExplosionDirectionLeft = FVector(1.0f, 0.0f, 0.0f);
-	FVector EndLeft = Start + (ExplosionDirectionLeft  * Range);
-	DrawDebugLine(GetWorld(), Start, EndLeft, FColor::Blue, false, 30, 10, 5);
-	bool isHitLeft = GetWorld()->LineTraceMultiByChannel(OutHits2, Start, EndLeft, ECC_Visibility, CollisionParams);
+	
 
 
-	FVector ExplosionDirectionUp = FVector(0.0f, 1.0f, 0.0f);
+	
 	FVector EndUp = Start + (ExplosionDirectionUp  * Range);
 	DrawDebugLine(GetWorld(), Start, EndUp, FColor::Green, false, 30, 10, 5);
 	bool isHitUp = GetWorld()->LineTraceMultiByChannel(OutHits3, Start, EndUp, ECC_Visibility, CollisionParams);
 
 	
 
-	FVector ExplosionDirectionDown = FVector(0.0f, -1.0f, 0.0f);
+	
 
 	FVector EndDown = Start + (ExplosionDirectionDown  * Range);
 	DrawDebugLine(GetWorld(), Start, EndDown, FColor::Orange, false, 30, 10, 5);

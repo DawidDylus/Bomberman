@@ -19,6 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -29,17 +30,33 @@ public:
 	UPROPERTY(EditAnywhere)
 		float TimeToExplode = 3.0f;
 
-	UFUNCTION()
-		void Explosion();
+	UPROPERTY(VisibleAnywhere)
+		TArray<FVector> ExplosionDirections =
+	{
+		FVector(-1.0f, 0.0f, 0.0f),	// Right
+		FVector(1.0f, 0.0f, 0.0f),	// Left
+		FVector(0.0f, 1.0f, 0.0f),	// Up
+		FVector(0.0f, -1.0f, 0.0f)  // Down 
+	};
+		
+
+	
 	
 	// Eliminate magic number
 	UPROPERTY(EditAnywhere)
 		float Range = 250.0f;
 
+	UFUNCTION()
+		void Explosion();
 
 private:
 
 	FTimerHandle TimerHandle;
 	  	
+	void ExplosionHits(TArray<FHitResult>&);
+
+	
 
 };
+
+
