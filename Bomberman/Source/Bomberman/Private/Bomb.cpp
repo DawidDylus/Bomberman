@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 #include "Containers/Array.h"
 #include "DrawDebugHelpers.h"
+#include "NormalBoxes.h"
 
 
 // Sets default values
@@ -43,7 +44,7 @@ void ABomb::Tick(float DeltaTime)
 
 }
 
-//Create one TArray<FHitResult> From different LineTraceMultiByChannel
+//Create one TArray<FHitResult> from different arrays created by LineTraceMultiByChannel 
 //Quantity of linesTrace is specified by number of elements in ExplosionDirections array
 void ABomb::ExplosionHits(TArray<FHitResult>& OutHits)
 {
@@ -80,137 +81,28 @@ void ABomb::Explosion()
 
 	
 	// TODO function that handle interaction with characters and boxes
-	for (FHitResult Results : OutHits)
+	for (FHitResult Hit : OutHits)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Results.GetActor()->GetName());
-	}
+		if (Hit.GetActor()->GetClass()->IsChildOf<APawn>())
+		{
+			// Have To change Character node class to c++ class
+			
 
+			GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Hit.GetActor()->GetName());
+		}
 
-
-
-
-
-	// TODO Refactor Function	
-	/*
-	TArray<FHitResult> OutHitsRightRay;
-	TArray<FHitResult> OutHitsLeftRay;
-	TArray<FHitResult> OutHitsUpRay;
-	TArray<FHitResult> OutHitsDownRay;
-	*/
-	// create array of direction and then go throu it in funcions (difrent directions will have difrent outpust[htis] and then add all of those arrays into one and get it back)
-
-	/*FVector ExplosionDirectionRight = FVector(-1.0f, 0.0f, 0.0f);
-	FVector ExplosionDirectionLeft = FVector(1.0f, 0.0f, 0.0f);
-	FVector ExplosionDirectionUp = FVector(0.0f, 1.0f, 0.0f);
-	FVector ExplosionDirectionDown = FVector(0.0f, -1.0f, 0.0f);
-	*/
-	/*
-	TArray<FVector> ExplosionDirections;
-	Directions.Add(ExplosionDirectionRight);
-	Directions.Add(ExplosionDirectionLeft);
-	Directions.Add(ExplosionDirectionUp);
-	Directions.Add(ExplosionDirectionDown);
-	*/
-	
-	/*
-	ExplosionHits(OutHitsRightRay, ExplosionDirectionRight);
-	ExplosionHits(OutHitsLeftRay, ExplosionDirectionLeft);
-	ExplosionHits(OutHitsUpRay, ExplosionDirectionUp);
-	ExplosionHits(OutHitsDownRay, ExplosionDirectionDown);
-	*/
+		else if (Hit.GetActor()->GetClass()->IsChildOf<ANormalBoxes>())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Hit.GetActor()->GetName());
+		}
 
 		
-	
-	
-
-	
-
-
-	
-
-	
-
-	
-	
-	
-	
-
-	/*
-	
-
-	CollisionParams.bIgnoreTouches = false;
-	// Ignoring thic so that it will not hit itself.
-	
-	
-
-
-	
-	FVector EndUp = Start + (ExplosionDirectionUp  * Range);
-	DrawDebugLine(GetWorld(), Start, EndUp, FColor::Green, false, 30, 10, 5);
-	bool isHitUp = GetWorld()->LineTraceMultiByChannel(OutHits3, Start, EndUp, ECC_Visibility, CollisionParams);
-
-	
-
-	
-
-	FVector EndDown = Start + (ExplosionDirectionDown  * Range);
-	DrawDebugLine(GetWorld(), Start, EndDown, FColor::Orange, false, 30, 10, 5);
-	bool isHitDown = GetWorld()->LineTraceMultiByChannel(OutHits4, Start, EndDown, ECC_Visibility, CollisionParams);
-
-	//change to function
-	
-
-	if (isHitLeft)
-	{
-		FHitResult RR2;
-		FString RRRes2 = RR2.GetFirstBlockingHit(OutHits2)->GetActor()->GetName();
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Blue, RRRes2);
 	}
 
-	if (isHitUp)
-	{
-		FHitResult RR3;
-		FString RRRes3 = RR3.GetFirstBlockingHit(OutHits3)->GetActor()->GetName();
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Green, RRRes3);
-	}
-
-	if (isHitDown)
-	{ 
-		FHitResult RR4;
-		FString RRRes4 = RR4.GetFirstBlockingHit(OutHits4)->GetActor()->GetName();
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Orange, RRRes4);
-	}
-	
-	// TODO Print OuthHits on screan 
-	/*for (FHitResult Result : OutHits1)
-	{
-		
-		
-		
-		
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Purple, Res);
-	}
-	
 	
 
+
+
 	
-	for (FHitResult Result : OutHits2)
-	{
-		FString Res = Result.GetActor()->GetName();
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Res);
-	}
-	
-	for (FHitResult Result : OutHits3)
-	{
-		FString Res = Result.GetActor()->GetName();
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Res);
-	}
-	
-	for (FHitResult Result : OutHits4)
-	{
-		FString Res = Result.GetActor()->GetName();
-		GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Res);
-	}
-	*/
 }
 

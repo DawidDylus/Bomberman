@@ -1,7 +1,5 @@
 # Bomberman
 
-I kinda forgot about this folder. :( I've Should have written comments here, so you could have seen it in commits.
-
 Notes about map:
 Bombs are not proportional and it let you go pass them. I will not change that because it can be done leater. Moreover possibity of passing bombs is intresting and might be quite fun. Have to check that leater.
 
@@ -10,3 +8,4 @@ I created it specialy for creating Actors in world.I wanted this to be a compone
 
 I am trying to put all my #include in .cpp files so it will not be loaded when I put reference to .h file
 
+I had to change Character from BP to BP child of c++ class. I can use old BP function and add  new variables to it in c++. C++ class of character is imported from ThirdPersonView c++ project without some functions or components.
