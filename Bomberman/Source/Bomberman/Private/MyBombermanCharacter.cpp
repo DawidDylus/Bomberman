@@ -10,17 +10,17 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "SpawnNewActor.h"
 #include "Bomb.h"
 
 // Sets default values
 AMyBombermanCharacter::AMyBombermanCharacter()
-{				
-	DistanceToNewSpawnedBomb = FVector(100.0f, 100.0f, 0.0f); // Set default range to new spawned object(Bomb)
+{			
+	BombRange = 200.0f;
+	DistanceToNewSpawnedBomb = FVector(50.0f, 50.0f, 0.0f); // Set default range to new spawned object(Bomb)
 	Lives = 3;  // Set default lives number
 	DistanceToGround = FVector(0.0f, 0.0f, 21.0f); // Set default z axis (should be little above ground);
 
-	SpawnComponent = CreateDefaultSubobject<USpawnNewActor>(TEXT("SuperSpawnComponent")); // Add new component (SpawnNewActor)
+	
 	
 
 		//  Set default SkeletalMesh
@@ -91,6 +91,26 @@ int32 AMyBombermanCharacter::GetLives()
 	return Lives;
 }
 
+void AMyBombermanCharacter::SetBombRange(float x)
+{
+	BombRange = x;
+}
+
+float AMyBombermanCharacter::GetBombRange()
+{
+	return BombRange;
+}
+
+void AMyBombermanCharacter::SetBombQuantity(int x)
+{
+	BombQuantity = x;
+}
+
+int32 AMyBombermanCharacter::GetQuantity()
+{
+	return BombQuantity;
+}
+
 
 
 
@@ -128,12 +148,12 @@ FVector AMyBombermanCharacter::FindPlaceForBomb(FVector DistanceToNewSpawnedActo
 }
 
 void AMyBombermanCharacter::PlaceBombA()
-{		
-	
-		
-	 ConstructorHelpers::FObjectFinder<ABomb>Bomb(TEXT("Public/Bomb.h"));
+{			 
 	// ActorRotation take care of rotation of new spawned object so that if it have some more specialised mesh
 	// it will be placed with the same rotation as Actor that place it
-	SpawnComponent->CreateActor(Bomb.Object->GetClass(), FindPlaceForBomb(DistanceToNewSpawnedBomb, DistanceToGround), GetActorRotation());	
 	
+	ABomb* SpawnedBomb = (ABomb*) GetWorld()->SpawnActor<ABomb>(FindPlaceForBomb(DistanceToNewSpawnedBomb, DistanceToGround), GetActorRotation());	
+	SpawnedBomb->SetSpawnedCharacterBombRange(GetBombRange());
+	
+
 }

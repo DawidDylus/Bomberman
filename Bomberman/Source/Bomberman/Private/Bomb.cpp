@@ -10,11 +10,15 @@
 #include "DrawDebugHelpers.h"
 #include "NormalBoxes.h"
 #include "MyBombermanCharacter.h"
+#include "Public/Math/UnrealMathUtility.h"
+#include "Random_Pickup.h"
+
 
 // Sets default values
 ABomb::ABomb()
-{
-	
+{	
+	SpawnedCharacterBombRange = 50.0f;
+
 	ExplosionDirections =
 	{
 		FVector(-1.0f, 0.0f, 0.0f),	// Right
@@ -23,7 +27,7 @@ ABomb::ABomb()
 		FVector(0.0f, -1.0f, 0.0f)  // Down 
 	};
 
-	Range = 250.0f;
+	
 	TimeToExplode = 3.0f;
 
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -49,6 +53,11 @@ void ABomb::BeginPlay()
 
 }
 
+bool ABomb::ShouldHappen(int Percentage)
+{
+	return (FMath::RandRange(1, 100) <= Percentage ? true : false);
+}
+
 // Called every frame
 void ABomb::Tick(float DeltaTime)
 {
@@ -72,7 +81,7 @@ void ABomb::ExplosionHits(TArray<FHitResult>& OutHits)
 		CollisionParams.AddIgnoredActor(this->GetUniqueID());	// Ignore itself so that ABomb will not block LineTrace
 		CollisionParams.bIgnoreTouches = false;					// Dont ingore overlaping
 
-		FVector EndLocation = StartLocation + (ExplosionDirection * Range);
+		FVector EndLocation = StartLocation + (ExplosionDirection * GetSpawnedCharacterBombRange());
 
 		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 30, 10, 5);
 
@@ -81,6 +90,16 @@ void ABomb::ExplosionHits(TArray<FHitResult>& OutHits)
 		OutHits.Append(OutHitsTemp);
 
 	}	
+}
+
+void ABomb::SetSpawnedCharacterBombRange(float x)
+{
+	SpawnedCharacterBombRange = x;
+}
+
+float ABomb::GetSpawnedCharacterBombRange()
+{
+	return SpawnedCharacterBombRange;
 }
 
 void ABomb::Explosion()
@@ -114,7 +133,10 @@ void ABomb::Explosion()
 			auto BoxHit = Cast<ANormalBoxes>(Hit.GetActor());
 
 			// TODO Call function on box to spawn Pickups
-
+			if (ShouldHappen(30))
+			{
+				GetWorld()->SpawnActor<ARandom_Pickup>(BoxHit->GetActorLocation(), BoxHit->GetActorRotation());
+			}
 			BoxHit->Destroy();
 			GetWorld()->ForceGarbageCollection();			
 
@@ -122,10 +144,6 @@ void ABomb::Explosion()
 
 		
 	}
-
-	
-
-
 
 	
 }

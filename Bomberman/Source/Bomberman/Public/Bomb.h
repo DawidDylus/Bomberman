@@ -33,12 +33,15 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		TArray<FVector> ExplosionDirections;
 		
+	UFUNCTION(BlueprintCallable)
+		void SetSpawnedCharacterBombRange(float x);
 
+	UFUNCTION(BlueprintCallable)
+		float GetSpawnedCharacterBombRange();
 	
 	
-	// Eliminate magic number
-	UPROPERTY(EditAnywhere)
-		float Range;
+	
+	
 
 	UFUNCTION()
 		void Explosion();
@@ -48,7 +51,9 @@ private:
 	FTimerHandle TimerHandle;
 	  	
 	void ExplosionHits(TArray<FHitResult>&);
-
+	bool ShouldHappen(int Percentage);
+	float SpawnedCharacterBombRange;
+	
 	
 
 };

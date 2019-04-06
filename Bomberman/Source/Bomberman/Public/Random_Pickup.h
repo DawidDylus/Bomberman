@@ -4,31 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "NormalBoxes.generated.h"
+#include "Random_Pickup.generated.h"
 
 UCLASS()
-class BOMBERMAN_API ANormalBoxes : public AActor
+class BOMBERMAN_API ARandom_Pickup : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ANormalBoxes();
+	ARandom_Pickup();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* SuperMesh;
-	
+private:	
 
-	
+	int NumbersOfPickups;
 
 };

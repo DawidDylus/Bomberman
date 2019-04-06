@@ -42,10 +42,20 @@ public:
 		void SetLives(int x);
 
 	UFUNCTION(BlueprintCallable)
-		int32 GetLives();
+		int32 GetLives();	
 
-	UPROPERTY(VisibleAnywhere)
-		class USpawnNewActor* SpawnComponent;
+	UFUNCTION(BlueprintCallable)
+		void SetBombRange(float x);
+
+	UFUNCTION(BlueprintCallable)
+		float GetBombRange();
+
+	UFUNCTION(BlueprintCallable)
+		void SetBombQuantity(int x);
+
+	UFUNCTION(BlueprintCallable)
+		int32 GetQuantity();
+
 
 	UPROPERTY(EditAnywhere)
 		FVector DistanceToNewSpawnedBomb;
@@ -54,8 +64,9 @@ public:
 		FVector DistanceToGround;
 
 		
-private:
-	
+private:	
+		float BombRange;
 		int32 Lives;
+		int32 BombQuantity;
 
 };
