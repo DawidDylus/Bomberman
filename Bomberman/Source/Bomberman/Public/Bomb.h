@@ -28,23 +28,17 @@ public:
 		UStaticMeshComponent* SuperMesh;
 
 	UPROPERTY(EditAnywhere)
-		float TimeToExplode = 3.0f;
+		float TimeToExplode;
 
 	UPROPERTY(VisibleAnywhere)
-		TArray<FVector> ExplosionDirections =
-	{
-		FVector(-1.0f, 0.0f, 0.0f),	// Right
-		FVector(1.0f, 0.0f, 0.0f),	// Left
-		FVector(0.0f, 1.0f, 0.0f),	// Up
-		FVector(0.0f, -1.0f, 0.0f)  // Down 
-	};
+		TArray<FVector> ExplosionDirections;
 		
 
 	
 	
 	// Eliminate magic number
 	UPROPERTY(EditAnywhere)
-		float Range = 250.0f;
+		float Range;
 
 	UFUNCTION()
 		void Explosion();

@@ -9,11 +9,23 @@
 #include "Containers/Array.h"
 #include "DrawDebugHelpers.h"
 #include "NormalBoxes.h"
-
+#include "MyBombermanCharacter.h"
 
 // Sets default values
 ABomb::ABomb()
 {
+	
+	ExplosionDirections =
+	{
+		FVector(-1.0f, 0.0f, 0.0f),	// Right
+		FVector(1.0f, 0.0f, 0.0f),	// Left
+		FVector(0.0f, 1.0f, 0.0f),	// Up
+		FVector(0.0f, -1.0f, 0.0f)  // Down 
+	};
+
+	Range = 250.0f;
+	TimeToExplode = 3.0f;
+
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -22,7 +34,7 @@ ABomb::ABomb()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>MyMesh(TEXT("/Game/StarterContent/Shapes/Shape_Sphere.Shape_Sphere"));
 	if(MyMesh.Succeeded())
 	SuperMesh->SetStaticMesh(MyMesh.Object);
-
+	
 	
 }
 
@@ -85,15 +97,27 @@ void ABomb::Explosion()
 	{
 		if (Hit.GetActor()->GetClass()->IsChildOf<APawn>())
 		{
-			// Have To change Character node class to c++ class
-			
+			// Set ActprHit to specific Object in the world
+			auto PawnHit = Cast<AMyBombermanCharacter>(Hit.GetActor());
+			PawnHit->SetLives(PawnHit->GetLives()-1);
 
-			GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Hit.GetActor()->GetName());
+			if (PawnHit->GetLives() <= 0)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red,"YOU ARE DEAD!");
+			}
+
+			
 		}
 
 		else if (Hit.GetActor()->GetClass()->IsChildOf<ANormalBoxes>())
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 100000000000.0f, FColor::Red, Hit.GetActor()->GetName());
+			auto BoxHit = Cast<ANormalBoxes>(Hit.GetActor());
+
+			// TODO Call function on box to spawn Pickups
+
+			BoxHit->Destroy();
+			GetWorld()->ForceGarbageCollection();			
+
 		}
 
 		

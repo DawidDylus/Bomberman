@@ -22,6 +22,12 @@ protected:
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
+
+	// Called for placing new bomb actor
+	FVector FindPlaceForBomb(FVector DistanceToNewSpawnedActor, FVector DistanceToGround);
+
+	
+	void PlaceBombA();
 	
 	
 
@@ -30,9 +36,26 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 
-public:
+public:		
+
+	UFUNCTION(BlueprintCallable)
+		void SetLives(int x);
+
+	UFUNCTION(BlueprintCallable)
+		int32 GetLives();
+
+	UPROPERTY(VisibleAnywhere)
+		class USpawnNewActor* SpawnComponent;
 
 	UPROPERTY(EditAnywhere)
-		int32 Lives = 3;
+		FVector DistanceToNewSpawnedBomb;
+
+	UPROPERTY(EditAnywhere)
+		FVector DistanceToGround;
+
+		
+private:
 	
+		int32 Lives;
+
 };

@@ -18,10 +18,6 @@ public:
 	USpawnNewActor();
 
 
-
-	
-
-
 protected:
 	
 private:
@@ -34,8 +30,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void CreateActor(TSubclassOf<AActor> ClassType, FVector Location, FRotator Rotation);
-
-	UPROPERTY(EditAnywhere)
-		int32 Lives = 3;
+	
+		
 		
 };

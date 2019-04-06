@@ -8,4 +8,4 @@ I created it specialy for creating Actors in world.I wanted this to be a compone
 
 I am trying to put all my #include in .cpp files so it will not be loaded when I put reference to .h file
 
-I had to change Character from BP to BP child of c++ class. I can use old BP function and add  new variables to it in c++. C++ class of character is imported from ThirdPersonView c++ project without some functions or components.
+I had to change Character from BP to c++ class to acces variables from Character class.I have to delete SpawnActorComponent, it does nothing than SpawnActor function cant do.
