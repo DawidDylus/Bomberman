@@ -135,7 +135,17 @@ void ABomb::Explosion()
 			// TODO Call function on box to spawn Pickups
 			if (ShouldHappen(30))
 			{
-				GetWorld()->SpawnActor<ARandom_Pickup>(BoxHit->GetActorLocation(), BoxHit->GetActorRotation());
+				TArray<AActor*> RandomPickup_Children;
+				ARandom_Pickup* PickupToSpawn=nullptr;
+
+				// Get number of RandomPickup childrens
+				PickupToSpawn->GetAllChildActors(RandomPickup_Children, true); 
+
+				// Generate randomIndex number between 1 and number of RandomPickup childrens;
+				int32 randomIndex = FMath::RandRange(1, RandomPickup_Children.Num()); 
+
+				// Spawn random RandomPickup children to world;
+				GetWorld()->SpawnActor<ARandom_Pickup>(RandomPickup_Children[randomIndex]->GetClass(), BoxHit->GetActorLocation(), BoxHit->GetActorRotation());
 			}
 			BoxHit->Destroy();
 			GetWorld()->ForceGarbageCollection();			
