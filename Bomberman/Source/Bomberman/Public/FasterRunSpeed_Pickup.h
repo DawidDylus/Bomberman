@@ -13,5 +13,12 @@ UCLASS()
 class BOMBERMAN_API AFasterRunSpeed_Pickup : public ARandom_Pickup
 {
 	GENERATED_BODY()
-	
+
+public:
+	// Sets default values for this actor's properties
+	AFasterRunSpeed_Pickup();
+
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* SuperMesh;
+
 };
